@@ -1,59 +1,202 @@
-# BackofficeApp
+# ⏰ Sistema de Batimento de Ponto
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.2.9.
+Sistema web moderno e responsivo para registro de ponto eletrônico, desenvolvido com Angular 19.
 
-## Development server
+![Angular](https://img.shields.io/badge/Angular-19-red)
+![TypeScript](https://img.shields.io/badge/TypeScript-5.6-blue)
+![License](https://img.shields.io/badge/license-MIT-green)
 
-To start a local development server, run:
+## 🚀 Características
 
+- ✅ **Interface Moderna**: Design limpo e profissional com gradientes
+- ✅ **Responsivo**: Funciona perfeitamente em desktop, tablet e mobile
+- ✅ **Tempo Real**: Relógio atualizado a cada segundo
+- ✅ **Validação Inteligente**: Impede registros inválidos automaticamente
+- ✅ **Cálculo Automático**: Horas trabalhadas e pausas calculadas em tempo real
+- ✅ **Persistência Local**: Dados salvos no navegador (localStorage)
+- ✅ **Sem Backend**: Funciona 100% no cliente
+
+## 📋 Funcionalidades
+
+### Tipos de Registro
+1. **Entrada** 🟢 - Marca chegada ao trabalho
+2. **Saída** 🔴 - Marca saída do trabalho
+3. **Início de Pausa** ⏸️ - Marca início de intervalo
+4. **Fim de Pausa** ▶️ - Marca fim de intervalo
+
+### Resumo do Dia
+- Tempo total trabalhado
+- Tempo total em pausa
+- Horário da primeira entrada
+- Horário da última saída
+
+### Histórico
+- Visualização de todos os batimentos do dia
+- Exclusão de registros incorretos
+- Ordenação cronológica
+
+## 🛠️ Tecnologias
+
+- **Framework**: Angular 19 (Standalone Components)
+- **Linguagem**: TypeScript 5.6+
+- **Estilização**: SCSS com variáveis e mixins
+- **Build**: esbuild (via Angular CLI)
+- **Armazenamento**: localStorage API
+
+## 📦 Instalação
+
+### Pré-requisitos
 ```bash
-ng serve
+node --version  # v18.0.0 ou superior
+npm --version   # v9.0.0 ou superior
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
-
-## Code scaffolding
-
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+### Passos
 
 ```bash
-ng generate component component-name
+# 1. Clone o repositório
+git clone <url-do-repositorio>
+
+# 2. Entre no diretório
+cd backofficeApp
+
+# 3. Instale as dependências
+npm install
+
+# 4. Inicie o servidor de desenvolvimento
+npm start
+
+# 5. Abra o navegador em
+http://localhost:4200
 ```
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+## 🎯 Como Usar
+
+1. **Primeiro Acesso**: Clique em "Entrada" para registrar sua chegada
+2. **Pausa**: Use "Iniciar Pausa" quando for fazer um intervalo
+3. **Retorno**: Use "Finalizar Pausa" ao voltar do intervalo
+4. **Saída**: Use "Saída" ao fim do expediente
+5. **Correções**: Clique no ícone 🗑️ para excluir registros incorretos
+
+### Regras de Validação
+
+O sistema aplica validação automática:
+
+```
+✅ Sequência Válida:
+Entrada → Pausa → Fim Pausa → Saída → Entrada
+
+❌ Sequência Inválida:
+Saída (sem entrada)
+Pausa (sem entrada)
+Fim Pausa (sem início)
+```
+
+## 🏗️ Estrutura do Projeto
+
+```
+src/app/
+├── models/
+│   └── time-entry.model.ts      # Interfaces e tipos
+├── services/
+│   └── time-clock.service.ts    # Lógica de negócio
+├── app.component.ts             # Componente principal
+├── app.component.html           # Template
+├── app.component.scss           # Estilos
+└── app.config.ts                # Configuração
+```
+
+## 📊 Modelo de Dados
+
+### TimeEntry
+```typescript
+{
+  id: string;           // ID único
+  userId: string;       // ID do usuário
+  userName: string;     // Nome do usuário
+  date: string;         // Data (YYYY-MM-DD)
+  entries: PunchEntry[] // Lista de batimentos
+}
+```
+
+### PunchEntry
+```typescript
+{
+  id: string;                    // ID único
+  timestamp: Date;               // Data/hora do batimento
+  type: 'entrada' | 'saida' |    // Tipo de batimento
+        'pausa-inicio' | 
+        'pausa-fim';
+  notes?: string;                // Observações (opcional)
+}
+```
+
+## 📚 Documentação
+
+Documentação técnica completa disponível em [DOCUMENTATION.md](./DOCUMENTATION.md)
+
+Inclui:
+- Arquitetura detalhada
+- Modelagem de dados
+- Fluxo de funcionamento
+- API dos serviços
+- Guia de contribuição
+
+## 🧪 Testes
 
 ```bash
-ng generate --help
+# Testes unitários
+npm test
+
+# Testes com coverage (quando disponível)
+npm run test:coverage
 ```
 
-## Building
+## 🚧 Roadmap
 
-To build the project run:
+### v1.1 (Próxima)
+- [ ] Histórico de dias anteriores
+- [ ] Exportação de relatórios (CSV)
+- [ ] Notas personalizadas nos batimentos
 
-```bash
-ng build
-```
+### v1.2
+- [ ] Múltiplos usuários
+- [ ] Tema escuro
+- [ ] Gráficos de produtividade
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+### v2.0
+- [ ] Backend com API
+- [ ] Banco de dados
+- [ ] Autenticação
+- [ ] App mobile
 
-## Running unit tests
+## 🤝 Contribuindo
 
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
+Contribuições são bem-vindas! Para contribuir:
 
-```bash
-ng test
-```
+1. Fork o projeto
+2. Crie uma branch: `git checkout -b feature/MinhaFeature`
+3. Commit: `git commit -m 'feat: Minha nova feature'`
+4. Push: `git push origin feature/MinhaFeature`
+5. Abra um Pull Request
 
-## Running end-to-end tests
+### Padrão de Commits
+Seguimos o [Conventional Commits](https://www.conventionalcommits.org/):
 
-For end-to-end (e2e) testing, run:
+- `feat:` Nova funcionalidade
+- `fix:` Correção de bug
+- `docs:` Documentação
+- `style:` Formatação de código
+- `refactor:` Refatoração
+- `test:` Testes
+- `chore:` Manutenção
 
-```bash
-ng e2e
-```
+## 📄 Licença
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+Este projeto está sob a licença MIT.
 
-## Additional Resources
+---
 
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+**Versão**: 1.0.0  
+**Status**: Em Desenvolvimento Ativo  
+**Última Atualização**: Janeiro 2026
