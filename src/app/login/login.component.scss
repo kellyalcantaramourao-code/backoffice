@@ -54,7 +54,7 @@
 }
 
 // Formulário
-.login-form {
+.login-form, .register-form {
   .form-group {
     margin-bottom: 1.5rem;
 
@@ -98,11 +98,18 @@
     }
   }
 
-  .btn-login {
+  .form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+
+    @media (max-width: 600px) {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .btn-login, .btn-register {
     width: 100%;
-    background: linear-gradient(135deg, #6c5ce7 0%, #a29bfe 100%);
-    color: white;
-    border: none;
     padding: 0.875rem 1rem;
     border-radius: 8px;
     font-size: 1rem;
@@ -124,6 +131,45 @@
       opacity: 0.6;
       cursor: not-allowed;
       transform: none;
+    }
+  }
+
+  .btn-login {
+    background: linear-gradient(135deg, #6c5ce7 0%, #a29bfe 100%);
+    color: white;
+    border: none;
+  }
+
+  .btn-register {
+    background: linear-gradient(135deg, #00d4aa 0%, #56efc3 100%);
+    color: white;
+    border: none;
+  }
+}
+
+.form-footer {
+  text-align: center;
+  margin-top: 1.5rem;
+
+  p {
+    color: #7f8c8d;
+    font-size: 0.9rem;
+    margin: 0;
+  }
+
+  .link-btn {
+    background: none;
+    border: none;
+    color: #6c5ce7;
+    cursor: pointer;
+    font-size: 0.9rem;
+    font-weight: 600;
+    text-decoration: underline;
+    padding: 0;
+    margin-left: 0.25rem;
+
+    &:hover {
+      color: #a29bfe;
     }
   }
 }
