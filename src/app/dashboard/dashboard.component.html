@@ -1,0 +1,104 @@
+<div class="time-clock-container">
+  <header class="header">
+    <h1>Sistema de Ponto</h1>
+    <div class="header-actions">
+      <button class="btn-logout" (click)="logout()">Sair</button>
+    </div>
+    <div class="current-time">
+      <div class="time">{{ formatTime(currentTime) }}</div>
+      <div class="date">{{ formatDate(currentTime) }}</div>
+    </div>
+  </header>
+
+  <main class="main-content">
+    <!-- Botões de Ação -->
+    <section class="action-buttons">
+      <button
+        class="btn btn-entrada"
+        [disabled]="!canRegisterEntry"
+        (click)="registerEntry()">
+        <span class="icon">🟢</span>
+        <span>Entrada</span>
+      </button>
+
+      <button
+        class="btn btn-saida"
+        [disabled]="!canRegisterExit"
+        (click)="registerExit()">
+        <span class="icon">🔴</span>
+        <span>Saída</span>
+      </button>
+
+      <button
+        class="btn btn-pausa"
+        [disabled]="!canRegisterPauseStart"
+        (click)="registerPauseStart()">
+        <span class="icon">⏸️</span>
+        <span>Iniciar Pausa</span>
+      </button>
+
+      <button
+        class="btn btn-pausa-fim"
+        [disabled]="!canRegisterPauseEnd"
+        (click)="registerPauseEnd()">
+        <span class="icon">▶️</span>
+        <span>Finalizar Pausa</span>
+      </button>
+    </section>
+
+    <!-- Resumo do Dia -->
+    <section class="summary" *ngIf="summary">
+      <h2>Resumo do Dia</h2>
+      <div class="summary-grid">
+        <div class="summary-card">
+          <div class="summary-label">Tempo Trabalhado</div>
+          <div class="summary-value">{{ timeClockService.formatMinutes(summary.totalWorked) }}</div>
+        </div>
+        <div class="summary-card">
+          <div class="summary-label">Tempo de Pausa</div>
+          <div class="summary-value">{{ timeClockService.formatMinutes(summary.totalPause) }}</div>
+        </div>
+        <div class="summary-card" *ngIf="summary.firstEntry">
+          <div class="summary-label">Primeira Entrada</div>
+          <div class="summary-value">{{ formatTime(summary.firstEntry) }}</div>
+        </div>
+        <div class="summary-card" *ngIf="summary.lastExit">
+          <div class="summary-label">Última Saída</div>
+          <div class="summary-value">{{ formatTime(summary.lastExit) }}</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Lista de Registros -->
+    <section class="entries-list">
+      <h2>Registros de Hoje</h2>
+      <div class="entries-container" *ngIf="todayEntries.length > 0; else noEntries">
+        <div class="entry-item" *ngFor="let entry of todayEntries" [class]="'entry-' + entry.type">
+          <div class="entry-icon">
+            <span *ngIf="entry.type === 'entrada'">🟢</span>
+            <span *ngIf="entry.type === 'saida'">🔴</span>
+            <span *ngIf="entry.type === 'pausa-inicio'">⏸️</span>
+            <span *ngIf="entry.type === 'pausa-fim'">▶️</span>
+          </div>
+          <div class="entry-info">
+            <div class="entry-type">{{ getPunchTypeLabel(entry.type) }}</div>
+            <div class="entry-time">{{ formatTime(entry.timestamp) }}</div>
+            <div class="entry-notes" *ngIf="entry.notes">{{ entry.notes }}</div>
+          </div>
+          <button class="btn-delete" (click)="deletePunch(entry.id)" title="Excluir">
+            🗑️
+          </button>
+        </div>
+      </div>
+      <ng-template #noEntries>
+        <div class="no-entries">
+          <p>Nenhum registro hoje. Clique em "Entrada" para começar!</p>
+        </div>
+      </ng-template>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <p>Sistema de Batimento de Ponto v1.0</p>
+  </footer>
+</div>
