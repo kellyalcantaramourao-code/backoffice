@@ -1,26 +1,34 @@
-// Variáveis de cores
-$primary-color: #2c3e50;
-$success-color: #27ae60;
-$danger-color: #e74c3c;
-$warning-color: #f39c12;
-$info-color: #3498db;
-$bg-color: #ecf0f1;
+// Variáveis de cores - Tema único personalizado
+$primary-color: #1a1a2e;
+$secondary-color: #16213e;
+$accent-color: #0f3460;
+$success-color: #00d4aa;
+$danger-color: #ff6b6b;
+$warning-color: #ffd93d;
+$info-color: #6c5ce7;
+$bg-color: #f8f9fa;
 $card-bg: #ffffff;
-$text-color: #2c3e50;
-$border-color: #bdc3c7;
+$text-color: #1a1a2e;
+$border-color: #e9ecef;
+$shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
 
 // Container principal
 .time-clock-container {
   min-height: 100vh;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background-attachment: fixed;
   display: flex;
   flex-direction: column;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 // Header
 .header {
   background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
   padding: 1rem 1.5rem;
+  box-shadow: $shadow;
+  border-bottom: 1px solid $border-color;
   
   h1 {
     margin: 0 0 1rem 0;
@@ -28,6 +36,7 @@ $border-color: #bdc3c7;
     font-size: 2rem;
     font-weight: 700;
     text-align: center;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   }
 
   .current-time {
@@ -39,6 +48,7 @@ $border-color: #bdc3c7;
       color: $primary-color;
       font-family: monospace;
       letter-spacing: 2px;
+      animation: pulse 2s infinite;
     }
     
     .date {
@@ -47,6 +57,11 @@ $border-color: #bdc3c7;
       margin-top: 0.5rem;
     }
   }
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.8; }
 }
 
 // Conteúdo principal
@@ -77,20 +92,32 @@ $border-color: #bdc3c7;
     gap: 0.5rem;
     font-size: 1rem;
     font-weight: 600;
+    box-shadow: $shadow;
+    transition: all 0.3s ease;
+    transform: translateY(0);
 
     .icon {
       font-size: 2rem;
+      transition: transform 0.3s ease;
     }
 
     &:hover:not(:disabled) {
+      transform: translateY(-5px);
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+      
+      .icon {
+        transform: scale(1.1);
+      }
     }
 
     &:active:not(:disabled) {
+      transform: translateY(-2px);
     }
 
     &:disabled {
       opacity: 0.5;
       cursor: not-allowed;
+      transform: none;
     }
 
     &.btn-entrada {
@@ -121,11 +148,14 @@ $border-color: #bdc3c7;
   padding: 1.5rem;
   border-radius: 12px;
   margin-bottom: 1.5rem;
+  box-shadow: $shadow;
+  backdrop-filter: blur(10px);
 
   h2 {
     margin: 0 0 1.5rem 0;
     color: $primary-color;
     font-size: 1.5rem;
+    text-align: center;
   }
 
   .summary-grid {
@@ -135,11 +165,17 @@ $border-color: #bdc3c7;
   }
 
   .summary-card {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, $accent-color 0%, $secondary-color 100%);
     padding: 1.5rem;
     border-radius: 8px;
     text-align: center;
     color: white;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+
+    &:hover {
+      transform: translateY(-3px);
+    }
 
     .summary-label {
       font-size: 0.9rem;
@@ -160,11 +196,14 @@ $border-color: #bdc3c7;
   background: white;
   padding: 1.5rem;
   border-radius: 12px;
+  box-shadow: $shadow;
+  backdrop-filter: blur(10px);
 
   h2 {
     margin: 0 0 1.5rem 0;
     color: $primary-color;
     font-size: 1.5rem;
+    text-align: center;
   }
 
   .entries-container {
@@ -180,8 +219,12 @@ $border-color: #bdc3c7;
     background: $bg-color;
     border-radius: 8px;
     border-left: 4px solid $border-color;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    transition: all 0.3s ease;
 
     &:hover {
+      transform: translateX(5px);
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
     }
 
     &.entry-entrada {
@@ -235,9 +278,12 @@ $border-color: #bdc3c7;
       cursor: pointer;
       padding: 0.5rem;
       opacity: 0.6;
+      transition: all 0.3s ease;
 
       &:hover {
         opacity: 1;
+        transform: scale(1.2);
+        color: $danger-color;
       }
     }
   }
@@ -256,10 +302,13 @@ $border-color: #bdc3c7;
 // Footer
 .footer {
   background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
   padding: 1rem;
   text-align: center;
   color: #7f8c8d;
   font-size: 0.9rem;
+  box-shadow: 0 -4px 16px rgba(0, 0, 0, 0.1);
+  border-top: 1px solid $border-color;
 
   p {
     margin: 0;
