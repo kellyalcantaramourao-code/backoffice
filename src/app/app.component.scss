@@ -20,8 +20,7 @@ $border-color: #bdc3c7;
 // Header
 .header {
   background: rgba(255, 255, 255, 0.95);
-  padding: 1.5rem 2rem;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  padding: 1rem 1.5rem;
   
   h1 {
     margin: 0 0 1rem 0;
@@ -38,7 +37,7 @@ $border-color: #bdc3c7;
       font-size: 3rem;
       font-weight: 700;
       color: $primary-color;
-      font-family: 'Courier New', monospace;
+      font-family: monospace;
       letter-spacing: 2px;
     }
     
@@ -53,7 +52,7 @@ $border-color: #bdc3c7;
 // Conteúdo principal
 .main-content {
   flex: 1;
-  padding: 2rem;
+  padding: 1.5rem;
   max-width: 1200px;
   margin: 0 auto;
   width: 100%;
@@ -64,7 +63,7 @@ $border-color: #bdc3c7;
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   gap: 1rem;
-  margin-bottom: 2rem;
+  margin-bottom: 1.5rem;
 
   .btn {
     background: white;
@@ -78,20 +77,15 @@ $border-color: #bdc3c7;
     gap: 0.5rem;
     font-size: 1rem;
     font-weight: 600;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 
     .icon {
       font-size: 2rem;
     }
 
     &:hover:not(:disabled) {
-      transform: translateY(-4px);
-      box-shadow: 0 8px 12px rgba(0, 0, 0, 0.15);
     }
 
     &:active:not(:disabled) {
-      transform: translateY(-2px);
     }
 
     &:disabled {
@@ -124,10 +118,9 @@ $border-color: #bdc3c7;
 // Resumo
 .summary {
   background: white;
-  padding: 2rem;
+  padding: 1.5rem;
   border-radius: 12px;
-  margin-bottom: 2rem;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  margin-bottom: 1.5rem;
 
   h2 {
     margin: 0 0 1.5rem 0;
@@ -157,7 +150,7 @@ $border-color: #bdc3c7;
     .summary-value {
       font-size: 1.8rem;
       font-weight: 700;
-      font-family: 'Courier New', monospace;
+      font-family: monospace;
     }
   }
 }
@@ -165,9 +158,8 @@ $border-color: #bdc3c7;
 // Lista de registros
 .entries-list {
   background: white;
-  padding: 2rem;
+  padding: 1.5rem;
   border-radius: 12px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 
   h2 {
     margin: 0 0 1.5rem 0;
@@ -188,11 +180,8 @@ $border-color: #bdc3c7;
     background: $bg-color;
     border-radius: 8px;
     border-left: 4px solid $border-color;
-    transition: all 0.2s ease;
 
     &:hover {
-      transform: translateX(4px);
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     }
 
     &.entry-entrada {
@@ -227,7 +216,7 @@ $border-color: #bdc3c7;
 
       .entry-time {
         font-size: 1.1rem;
-        font-family: 'Courier New', monospace;
+        font-family: monospace;
         color: #7f8c8d;
       }
 
@@ -246,11 +235,9 @@ $border-color: #bdc3c7;
       cursor: pointer;
       padding: 0.5rem;
       opacity: 0.6;
-      transition: all 0.2s ease;
 
       &:hover {
         opacity: 1;
-        transform: scale(1.2);
       }
     }
   }
@@ -273,7 +260,6 @@ $border-color: #bdc3c7;
   text-align: center;
   color: #7f8c8d;
   font-size: 0.9rem;
-  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
 
   p {
     margin: 0;
@@ -334,30 +320,6 @@ $border-color: #bdc3c7;
 
     .summary-value {
       font-size: 1.4rem;
-    }
-  }
-}
-
-@media (max-width: 480px) {
-  .action-buttons {
-    grid-template-columns: 1fr;
-  }
-
-  .summary-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .entry-item {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 0.5rem;
-
-    .entry-icon {
-      margin-right: 0;
-    }
-
-    .btn-delete {
-      align-self: flex-end;
     }
   }
 }
