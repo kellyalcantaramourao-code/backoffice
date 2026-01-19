@@ -1,7 +1,20 @@
+export interface User {
+  id: string;
+  nome: string;
+  servidor: string;
+  nickname: string;
+  email: string;
+  senha: string;
+  role: 'employee' | 'manager';
+  lastLogin?: Date;
+  suspended?: boolean;
+  suspendedReason?: string;
+}
+
 export interface TimeEntry {
   id: string;
   userId: string;
-  userName: string;
+  userName: string; // nickname
   date: string; // YYYY-MM-DD
   entries: PunchEntry[];
 }

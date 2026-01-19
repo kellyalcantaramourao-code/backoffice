@@ -1,7 +1,7 @@
 // Container principal do login
 .login-container {
   min-height: 100vh;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #1b6433 0%, #3b4e39 100%);
   background-attachment: fixed;
   display: flex;
   align-items: center;
@@ -39,7 +39,7 @@
   margin-bottom: 2rem;
 
   h1 {
-    color: #1a1a2e;
+    color: #3b7723;
     font-size: 2rem;
     font-weight: 700;
     margin: 0 0 0.5rem 0;
@@ -60,7 +60,7 @@
 
     label {
       display: block;
-      color: #1a1a2e;
+      color: #1a2e21;
       font-weight: 600;
       margin-bottom: 0.5rem;
       font-size: 0.9rem;
@@ -160,7 +160,7 @@
   .link-btn {
     background: none;
     border: none;
-    color: #6c5ce7;
+    color: #357a44;
     cursor: pointer;
     font-size: 0.9rem;
     font-weight: 600;
@@ -169,7 +169,7 @@
     margin-left: 0.25rem;
 
     &:hover {
-      color: #a29bfe;
+      color: #cbfe9b;
     }
   }
 }

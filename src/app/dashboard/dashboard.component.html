@@ -4,98 +4,236 @@
     <div class="header-actions">
       <button class="btn-logout" (click)="logout()">Sair</button>
     </div>
-    <div class="current-time">
+    <div class="current-time" *ngIf="!isManager">
       <div class="time">{{ formatTime(currentTime) }}</div>
       <div class="date">{{ formatDate(currentTime) }}</div>
     </div>
   </header>
 
   <main class="main-content">
-    <!-- Botões de Ação -->
-    <section class="action-buttons">
-      <button
-        class="btn btn-entrada"
-        [disabled]="!canRegisterEntry"
-        (click)="registerEntry()">
-        <span class="icon">🟢</span>
-        <span>Entrada</span>
-      </button>
+    <!-- Dashboard do Funcionário -->
+    <div *ngIf="!isManager">
+      <!-- Botões de Ação -->
+      <section class="action-buttons">
+        <button
+          class="btn btn-entrada"
+          [disabled]="!canRegisterEntry"
+          (click)="registerEntry()">
+          <span class="icon">🟢</span>
+          <span>Entrada</span>
+        </button>
 
-      <button
-        class="btn btn-saida"
-        [disabled]="!canRegisterExit"
-        (click)="registerExit()">
-        <span class="icon">🔴</span>
-        <span>Saída</span>
-      </button>
+        <button
+          class="btn btn-saida"
+          [disabled]="!canRegisterExit"
+          (click)="registerExit()">
+          <span class="icon">🔴</span>
+          <span>Saída</span>
+        </button>
 
-      <button
-        class="btn btn-pausa"
-        [disabled]="!canRegisterPauseStart"
-        (click)="registerPauseStart()">
-        <span class="icon">⏸️</span>
-        <span>Iniciar Pausa</span>
-      </button>
+        <button
+          class="btn btn-pausa"
+          [disabled]="!canRegisterPauseStart"
+          (click)="registerPauseStart()">
+          <span class="icon">⏸️</span>
+          <span>Iniciar Pausa</span>
+        </button>
 
-      <button
-        class="btn btn-pausa-fim"
-        [disabled]="!canRegisterPauseEnd"
-        (click)="registerPauseEnd()">
-        <span class="icon">▶️</span>
-        <span>Finalizar Pausa</span>
-      </button>
-    </section>
+        <button
+          class="btn btn-pausa-fim"
+          [disabled]="!canRegisterPauseEnd"
+          (click)="registerPauseEnd()">
+          <span class="icon">▶️</span>
+          <span>Finalizar Pausa</span>
+        </button>
+      </section>
 
-    <!-- Resumo do Dia -->
-    <section class="summary" *ngIf="summary">
-      <h2>Resumo do Dia</h2>
-      <div class="summary-grid">
-        <div class="summary-card">
-          <div class="summary-label">Tempo Trabalhado</div>
-          <div class="summary-value">{{ timeClockService.formatMinutes(summary.totalWorked) }}</div>
-        </div>
-        <div class="summary-card">
-          <div class="summary-label">Tempo de Pausa</div>
-          <div class="summary-value">{{ timeClockService.formatMinutes(summary.totalPause) }}</div>
-        </div>
-        <div class="summary-card" *ngIf="summary.firstEntry">
-          <div class="summary-label">Primeira Entrada</div>
-          <div class="summary-value">{{ formatTime(summary.firstEntry) }}</div>
-        </div>
-        <div class="summary-card" *ngIf="summary.lastExit">
-          <div class="summary-label">Última Saída</div>
-          <div class="summary-value">{{ formatTime(summary.lastExit) }}</div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Lista de Registros -->
-    <section class="entries-list">
-      <h2>Registros de Hoje</h2>
-      <div class="entries-container" *ngIf="todayEntries.length > 0; else noEntries">
-        <div class="entry-item" *ngFor="let entry of todayEntries" [class]="'entry-' + entry.type">
-          <div class="entry-icon">
-            <span *ngIf="entry.type === 'entrada'">🟢</span>
-            <span *ngIf="entry.type === 'saida'">🔴</span>
-            <span *ngIf="entry.type === 'pausa-inicio'">⏸️</span>
-            <span *ngIf="entry.type === 'pausa-fim'">▶️</span>
+      <!-- Resumo do Dia -->
+      <section class="summary" *ngIf="summary">
+        <h2>Resumo do Dia</h2>
+        <div class="summary-grid">
+          <div class="summary-card">
+            <div class="summary-label">Tempo Trabalhado</div>
+            <div class="summary-value">{{ timeClockService.formatMinutes(summary.totalWorked) }}</div>
           </div>
-          <div class="entry-info">
-            <div class="entry-type">{{ getPunchTypeLabel(entry.type) }}</div>
-            <div class="entry-time">{{ formatTime(entry.timestamp) }}</div>
-            <div class="entry-notes" *ngIf="entry.notes">{{ entry.notes }}</div>
+          <div class="summary-card">
+            <div class="summary-label">Tempo de Pausa</div>
+            <div class="summary-value">{{ timeClockService.formatMinutes(summary.totalPause) }}</div>
           </div>
-          <button class="btn-delete" (click)="deletePunch(entry.id)" title="Excluir">
-            🗑️
-          </button>
+          <div class="summary-card" *ngIf="summary.firstEntry">
+            <div class="summary-label">Primeira Entrada</div>
+            <div class="summary-value">{{ formatTime(summary.firstEntry) }}</div>
+          </div>
+          <div class="summary-card" *ngIf="summary.lastExit">
+            <div class="summary-label">Última Saída</div>
+            <div class="summary-value">{{ formatTime(summary.lastExit) }}</div>
+          </div>
         </div>
-      </div>
-      <ng-template #noEntries>
-        <div class="no-entries">
-          <p>Nenhum registro hoje. Clique em "Entrada" para começar!</p>
+      </section>
+
+      <!-- Relatório Final -->
+      <section class="summary" *ngIf="totalSummary">
+        <h2>Relatório Final - Total Acumulado</h2>
+        <div class="summary-grid">
+          <div class="summary-card">
+            <div class="summary-label">Total Horas Trabalhadas</div>
+            <div class="summary-value">{{ timeClockService.formatMinutes(totalSummary.totalWorked) }}</div>
+          </div>
+          <div class="summary-card">
+            <div class="summary-label">Total Tempo de Pausa</div>
+            <div class="summary-value">{{ timeClockService.formatMinutes(totalSummary.totalPause) }}</div>
+          </div>
+          <div class="summary-card">
+            <div class="summary-label">Dias Trabalhados</div>
+            <div class="summary-value">{{ totalSummary.daysWorked }}</div>
+          </div>
         </div>
-      </ng-template>
-    </section>
+      </section>
+
+      <!-- Lista de Registros -->
+      <section class="entries-list">
+        <h2>Registros de Hoje</h2>
+        <div class="entries-container" *ngIf="todayEntries.length > 0; else noEntries">
+          <div class="entry-item" *ngFor="let entry of todayEntries" [class]="'entry-' + entry.type">
+            <div class="entry-icon">
+              <span *ngIf="entry.type === 'entrada'">🟢</span>
+              <span *ngIf="entry.type === 'saida'">🔴</span>
+              <span *ngIf="entry.type === 'pausa-inicio'">⏸️</span>
+              <span *ngIf="entry.type === 'pausa-fim'">▶️</span>
+            </div>
+            <div class="entry-info">
+              <div class="entry-type">{{ getPunchTypeLabel(entry.type) }}</div>
+              <div class="entry-time">{{ formatTime(entry.timestamp) }}</div>
+              <div class="entry-notes" *ngIf="entry.notes">{{ entry.notes }}</div>
+            </div>
+            <button class="btn-delete" (click)="deletePunch(entry.id)" title="Excluir">
+              🗑️
+            </button>
+          </div>
+        </div>
+        <ng-template #noEntries>
+          <div class="no-entries">
+            <p>Nenhum registro hoje. Clique em "Entrada" para começar!</p>
+          </div>
+        </ng-template>
+      </section>
+
+      <!-- Resumo Final do Dia -->
+      <section class="daily-summary-final" *ngIf="summary">
+        <h2>📊 Resumo Final do Dia</h2>
+        <div class="final-summary-grid">
+          <div class="final-summary-card">
+            <div class="final-summary-icon">⏰</div>
+            <div class="final-summary-content">
+              <div class="final-summary-label">Horas Trabalhadas Hoje</div>
+              <div class="final-summary-value">{{ timeClockService.formatMinutes(summary.totalWorked) }}</div>
+            </div>
+          </div>
+          <div class="final-summary-card">
+            <div class="final-summary-icon">🔢</div>
+            <div class="final-summary-content">
+              <div class="final-summary-label">Total de Batidas Hoje</div>
+              <div class="final-summary-value">{{ todayEntries.length }}</div>
+            </div>
+          </div>
+        </div>
+        <div class="final-summary-message" *ngIf="summary.totalWorked > 0">
+          <p>🎉 Excelente trabalho hoje! Você trabalhou {{ timeClockService.formatMinutes(summary.totalWorked) }} e registrou {{ todayEntries.length }} batidas de ponto.</p>
+        </div>
+
+        <!-- Usuários Suspensos -->
+        <div class="period-section" *ngIf="suspendedUsers.length > 0">
+          <h3>🚫 Usuários Suspensos</h3>
+          <div class="suspended-users-list">
+            <div class="suspended-user-card" *ngFor="let user of suspendedUsers">
+              <div class="suspended-user-info">
+                <div class="suspended-user-name">{{ user.nome }}</div>
+                <div class="suspended-user-nickname">{{ user.nickname }}</div>
+                <div class="suspended-user-email">{{ user.email }}</div>
+                <div class="suspended-reason" *ngIf="user.suspendedReason">{{ user.suspendedReason }}</div>
+              </div>
+              <button class="btn-unsuspend" (click)="unsuspendUser(user.id)">
+                🔓 Liberar Acesso
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- Dashboard do Gerente -->
+    <div *ngIf="isManager">
+      <section class="summary">
+        <h2>Relatório de Todos os Funcionários</h2>
+        
+        <!-- Relatório de Hoje -->
+        <div class="period-section">
+          <h3>Hoje</h3>
+          <div class="employees-report">
+            <div class="employee-card" *ngFor="let report of employeesReport">
+              <div class="employee-header">
+                <div class="employee-info">
+                  <div class="employee-name">{{ report.user.nome }}</div>
+                  <div class="employee-nickname">{{ report.user.nickname }}</div>
+                  <div class="employee-email">{{ report.user.email }}</div>
+                </div>
+              </div>
+              <div class="employee-stats">
+                <div class="stat">
+                  <div class="stat-label">Horas Trabalhadas</div>
+                  <div class="stat-value">{{ timeClockService.formatMinutes(report.today.totalWorked) }}</div>
+                </div>
+                <div class="stat">
+                  <div class="stat-label">Tempo de Pausa</div>
+                  <div class="stat-value">{{ timeClockService.formatMinutes(report.today.totalPause) }}</div>
+                </div>
+                <div class="stat">
+                  <div class="stat-label">Dias Trabalhados</div>
+                  <div class="stat-value">{{ report.today.daysWorked }}</div>
+                </div>
+              </div>
+            </div>
+            <div *ngIf="employeesReport.length === 0" class="no-employees">
+              <p>Nenhum funcionário cadastrado ainda.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Relatório do Mês -->
+        <div class="period-section">
+          <h3>Este Mês</h3>
+          <div class="employees-report">
+            <div class="employee-card" *ngFor="let report of employeesReport">
+              <div class="employee-header">
+                <div class="employee-info">
+                  <div class="employee-name">{{ report.user.nome }}</div>
+                  <div class="employee-nickname">{{ report.user.nickname }}</div>
+                  <div class="employee-email">{{ report.user.email }}</div>
+                </div>
+              </div>
+              <div class="employee-stats">
+                <div class="stat">
+                  <div class="stat-label">Horas Trabalhadas</div>
+                  <div class="stat-value">{{ timeClockService.formatMinutes(report.thisMonth.totalWorked) }}</div>
+                </div>
+                <div class="stat">
+                  <div class="stat-label">Tempo de Pausa</div>
+                  <div class="stat-value">{{ timeClockService.formatMinutes(report.thisMonth.totalPause) }}</div>
+                </div>
+                <div class="stat">
+                  <div class="stat-label">Dias Trabalhados</div>
+                  <div class="stat-value">{{ report.thisMonth.daysWorked }}</div>
+                </div>
+              </div>
+            </div>
+            <div *ngIf="employeesReport.length === 0" class="no-employees">
+              <p>Nenhum funcionário cadastrado ainda.</p>
+            </div>
+          </div>
+        </div>
+
+      </section>
+    </div>
   </main>
 
   <footer class="footer">

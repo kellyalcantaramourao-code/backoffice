@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TimeClockService } from '../services/time-clock.service';
-import { PunchEntry, DailySummary } from '../models/time-entry.model';
+import { PunchEntry, DailySummary, User } from '../models/time-entry.model';
 import { Router } from '@angular/router';
 
 @Component({
@@ -14,7 +14,16 @@ export class DashboardComponent implements OnInit {
   currentTime: Date = new Date();
   todayEntries: PunchEntry[] = [];
   summary: DailySummary | null = null;
+  totalSummary: { totalWorked: number; totalPause: number; daysWorked: number } | null = null;
   lastPunchType: PunchEntry['type'] | null = null;
+  isManager = false;
+  employeesReport: { 
+    user: User; 
+    today: { totalWorked: number; totalPause: number; daysWorked: number };
+    thisMonth: { totalWorked: number; totalPause: number; daysWorked: number };
+    thisYear: { totalWorked: number; totalPause: number; daysWorked: number };
+  }[] = [];
+  suspendedUsers: User[] = [];
 
   constructor(public timeClockService: TimeClockService, private router: Router) {}
 
@@ -33,10 +42,21 @@ export class DashboardComponent implements OnInit {
   }
 
   loadTodayData() {
-    const todayEntry = this.timeClockService.getTodayEntry();
-    this.todayEntries = todayEntry?.entries || [];
-    this.summary = this.timeClockService.getTodaySummary();
-    this.lastPunchType = this.timeClockService.getLastPunchType();
+    const user = this.timeClockService.getCurrentUser();
+    this.isManager = this.timeClockService.isManager();
+    
+    if (this.isManager) {
+      this.employeesReport = this.timeClockService.getAllEmployeesReport();
+      this.suspendedUsers = this.timeClockService.getSuspendedUsers();
+      // Verificar usuários inativos a cada carregamento
+      this.timeClockService.suspendInactiveUsers();
+    } else {
+      const todayEntry = this.timeClockService.getTodayEntry();
+      this.todayEntries = todayEntry?.entries || [];
+      this.summary = this.timeClockService.getTodaySummary();
+      this.totalSummary = this.timeClockService.getTotalHoursSummary();
+      this.lastPunchType = this.timeClockService.getLastPunchType();
+    }
   }
 
   registerEntry() {
@@ -113,7 +133,20 @@ export class DashboardComponent implements OnInit {
   }
 
   logout() {
+    this.timeClockService.logout();
     localStorage.removeItem('isLoggedIn');
     this.router.navigate(['/login']);
+  }
+
+  unsuspendUser(userId: string) {
+    if (confirm('Deseja liberar o acesso deste usuário?')) {
+      const success = this.timeClockService.unsuspendUser(userId);
+      if (success) {
+        alert('Usuário liberado com sucesso!');
+        this.loadTodayData(); // Recarregar dados
+      } else {
+        alert('Erro ao liberar usuário.');
+      }
+    }
   }
 }

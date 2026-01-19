@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { Router } from '@angular/router';
+import { TimeClockService } from './services/time-clock.service';
 
 @Component({
   selector: 'app-root',
@@ -10,12 +11,12 @@ import { Router } from '@angular/router';
 })
 export class AppComponent implements OnInit {
 
-  constructor(private router: Router) {}
+  constructor(private router: Router, private timeClockService: TimeClockService) {}
 
   ngOnInit() {
     // Verificar se está logado
-    const isLoggedIn = localStorage.getItem('isLoggedIn');
-    if (!isLoggedIn) {
+    const currentUser = this.timeClockService.getCurrentUser();
+    if (!currentUser) {
       this.router.navigate(['/login']);
     }
   }
